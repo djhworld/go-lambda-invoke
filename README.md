@@ -1,6 +1,6 @@
 Small package to allow you to invoke your Go AWS lambda locally.
 
-This _might_ be useful for the following cases. 
+This _might_ be useful for:
 
 * You want to run an integration test, maybe in conjunction with [LocalStack](https://github.com/atlassian/localstack)?
   * Unit testing is probably better in most cases
