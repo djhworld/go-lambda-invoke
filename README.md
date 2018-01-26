@@ -1,3 +1,5 @@
+# go-lambda-invoke
+
 Small package to allow you to invoke your Go AWS lambda locally.
 
 This _might_ be useful for:
