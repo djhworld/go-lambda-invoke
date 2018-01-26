@@ -14,12 +14,12 @@ import (
 const functioninvoke = "Function.Invoke"
 
 //Invoke a Go based lambda, passing the configured payload
-func Invoke(port int, payload interface{}) ([]byte, error) {
-	return InvokeWithClientContext(port, payload, nil)
+func Run(port int, payload interface{}) ([]byte, error) {
+	return RunWithClientContext(port, payload, nil)
 }
 
 //InvokeWithClientContext a Go based lambda, passing the configured payload and ClientContext
-func InvokeWithClientContext(port int, payload interface{}, clientContext *lc.ClientContext) ([]byte, error) {
+func RunWithClientContext(port int, payload interface{}, clientContext *lc.ClientContext) ([]byte, error) {
 	request, err := createInvokeRequest(payload, clientContext)
 
 	if err != nil {

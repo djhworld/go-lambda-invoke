@@ -11,7 +11,7 @@ func TestSuccessIT(t *testing.T) {
 	input := "hello world"
 	expected := "HELLO WORLD"
 
-	response, err := Invoke(8001, input)
+	response, err := Run(8001, input)
 	if err != nil {
 		log.Println(err)
 		t.FailNow()
