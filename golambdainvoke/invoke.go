@@ -11,14 +11,16 @@ import (
 	lc "github.com/aws/aws-lambda-go/lambdacontext"
 )
 
-const functioninvoke = "Function.Invoke"
+const functioninvokeRPC = "Function.Invoke"
 
-//Invoke a Go based lambda, passing the configured payload
+//Run a Go based lambda, passing the configured payload
+//note that 'payload' can be anything that can be encoded by encoding/json
 func Run(port int, payload interface{}) ([]byte, error) {
 	return RunWithClientContext(port, payload, nil)
 }
 
-//InvokeWithClientContext a Go based lambda, passing the configured payload and ClientContext
+//RunWithClientContext a Go based lambda, passing the configured payload and ClientContext
+//note that 'payload' can be anything that can be encoded by encoding/json
 func RunWithClientContext(port int, payload interface{}, clientContext *lc.ClientContext) ([]byte, error) {
 	request, err := createInvokeRequest(payload, clientContext)
 
@@ -35,7 +37,7 @@ func RunWithClientContext(port int, payload interface{}, clientContext *lc.Clien
 	// 3. Issue an RPC request for the Function.Invoke method
 	var response messages.InvokeResponse
 
-	if err = client.Call(functioninvoke, request, &response); err != nil {
+	if err = client.Call(functioninvokeRPC, request, &response); err != nil {
 		return nil, err
 	}
 
