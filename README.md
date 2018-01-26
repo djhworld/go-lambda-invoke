@@ -6,6 +6,12 @@ This _might_ be useful for:
   * Unit testing is probably better in most cases
 * You want to validate your CI has built a valid `linux` binary of your application before deploying
 
+## Installing
+
+```
+go get -u github.com/djhworld/go-lambda-invoke/golambdainvoke
+```
+
 ## Example usage
 
 Run the example lambda [toupperlambda.go](/toupperlambda.go) on port 8001
