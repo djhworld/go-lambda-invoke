@@ -1,4 +1,4 @@
-package main
+package golambdainvoke
 
 import (
 	"encoding/json"
