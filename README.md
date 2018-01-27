@@ -8,6 +8,8 @@ This _might_ be useful for:
   * Unit testing is probably better in most cases
 * You want to validate your CI has built a valid `linux` binary of your application before deploying
 
+I wrote a blog post about it here https://djhworld.github.io/post/2018/01/27/running-go-aws-lambda-functions-locally/
+
 ## Installing
 
 ```
