@@ -11,7 +11,11 @@ func TestSuccessIT(t *testing.T) {
 	input := "hello world"
 	expected := "HELLO WORLD"
 
-	response, err := Run(8001, input)
+	response, err := Run(Input{
+		Port: 8001,
+		Payload: input,
+	})
+
 	if err != nil {
 		log.Println(err)
 		t.FailNow()
