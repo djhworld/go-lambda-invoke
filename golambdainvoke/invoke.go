@@ -13,23 +13,24 @@ import (
 
 const functioninvokeRPC = "Function.Invoke"
 
-//Run a Go based lambda, passing the configured payload
-//note that 'payload' can be anything that can be encoded by encoding/json
-func Run(port int, payload interface{}) ([]byte, error) {
-	return RunWithClientContext(port, payload, nil)
+type Input = struct {
+	Port int
+	Payload interface{}
+	ClientContext *lc.ClientContext
+	Deadline *messages.InvokeRequest_Timestamp
 }
 
-//RunWithClientContext a Go based lambda, passing the configured payload and ClientContext
+//Run a Go based lambda, passing the configured payload
 //note that 'payload' can be anything that can be encoded by encoding/json
-func RunWithClientContext(port int, payload interface{}, clientContext *lc.ClientContext) ([]byte, error) {
-	request, err := createInvokeRequest(payload, clientContext)
+func Run(input Input) ([]byte, error) {
+	request, err := createInvokeRequest(input)
 
 	if err != nil {
 		return nil, err
 	}
 
 	// 2. Open a TCP connection to the lambda
-	client, err := rpc.Dial("tcp", fmt.Sprintf(":%d", port))
+	client, err := rpc.Dial("tcp", fmt.Sprintf(":%d", input.Port))
 	if err != nil {
 		return nil, err
 	}
@@ -48,15 +49,15 @@ func RunWithClientContext(port int, payload interface{}, clientContext *lc.Clien
 	return response.Payload, nil
 }
 
-func createInvokeRequest(payload interface{}, clientContext *lc.ClientContext) (*messages.InvokeRequest, error) {
-	payloadEncoded, err := json.Marshal(payload)
+func createInvokeRequest(input Input) (*messages.InvokeRequest, error) {
+	payloadEncoded, err := json.Marshal(input.Payload)
 	if err != nil {
 		return nil, err
 	}
 
 	var clientContextEncoded []byte
-	if clientContext != nil {
-		b, err := json.Marshal(clientContext)
+	if input.ClientContext != nil {
+		b, err := json.Marshal(input.ClientContext)
 
 		if err != nil {
 			return nil, err
@@ -65,15 +66,21 @@ func createInvokeRequest(payload interface{}, clientContext *lc.ClientContext) (
 		clientContextEncoded = b
 	}
 
-	var t time.Time = time.Now()
+	Deadline := input.Deadline
+
+	if Deadline == nil {
+		t := time.Now()
+		Deadline = &messages.InvokeRequest_Timestamp{
+			Seconds: int64(t.Unix()),
+			Nanos:   int64(t.Nanosecond()),
+		}
+	}
+
 	return &messages.InvokeRequest{
 		Payload:      payloadEncoded,
 		RequestId:    "0",
 		XAmznTraceId: "",
-		Deadline: messages.InvokeRequest_Timestamp{
-			Seconds: int64(t.Unix()),
-			Nanos:   int64(t.Nanosecond()),
-		},
+		Deadline: *Deadline,
 		InvokedFunctionArn:    "",
 		CognitoIdentityId:     "",
 		CognitoIdentityPoolId: "",

@@ -27,7 +27,10 @@ _LAMBDA_SERVER_PORT=8001 go run ./toupperlambda.go
 Then use this library in tests or wherever you need it, by calling 
 
 ```
-response, err := golambdainvoke.Run(8001, "payload")
+response, err := golambdainvoke.Run(Input{
+    Port:    8001,
+    Payload: "payload",
+})
 ```
 
-Note that `payload` can be any structure that can be encoded by the `encoding/json` package. Your lambda function will need to use this structure in its type signature.
+Note that `Payload` can be any structure that can be encoded by the `encoding/json` package. Your lambda function will need to use this structure in its type signature.
