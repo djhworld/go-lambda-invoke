@@ -28,8 +28,8 @@ Then use this library in tests or wherever you need it, by calling
 
 ```
 response, err := golambdainvoke.Run(Input{
-    Port: 8001,
-    Payload: input,
+    Port:    8001,
+    Payload: "payload",
 })
 ```
 
